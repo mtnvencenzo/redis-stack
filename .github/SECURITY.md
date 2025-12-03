@@ -1,0 +1,72 @@
+# 🔒 Security Policy
+
+## 🛡️ Supported Versions
+
+We release patches for security vulnerabilities. Which versions are eligible for receiving such patches depends on the CVSS v3.0 Rating:
+
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.x.x   | :white_check_mark: |
+| < 1.0   | :x:                |
+
+## 🚨 Reporting a Vulnerability
+
+The Redis Stack team takes security bugs seriously. We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
+
+### Where to Report
+
+**Please do not report security vulnerabilities through public GitHub issues.**
+
+Instead, please report them to the maintainer [@mtnvencenzo](https://github.com/mtnvencenzo) or via email.
+
+### What to Include
+
+To help us better understand the nature and scope of the possible issue, please include as much of the following information as possible:
+
+- 🎯 **Type of issue** (e.g., container escape, credential exposure, network vulnerability, etc.)
+- 📁 **Service(s) affected** and version numbers
+- 📍 **Location of the affected configuration** (file/line or direct reference)
+- ⚙️ **Special configuration** required to reproduce the issue
+- 🔄 **Step-by-step instructions** to reproduce the issue
+- 💥 **Proof-of-concept or exploit code** (if possible)
+- 🎯 **Impact of the issue**, including how an attacker might exploit the issue
+
+
+## 🔐 Security Best Practices
+
+### For Stack Users
+
+- 🔄 **Keep Updated**: Always use the latest stable versions of Docker images
+- 🔑 **Credential Management**: Use Docker secrets or environment variables for sensitive values, never commit secrets
+- 🌐 **Network Security**: Implement proper network segmentation and access controls
+- 📱 **Access Control**: Use principle of least privilege for container access
+- 🏷️ **Image Pinning**: Pin image versions to avoid unexpected changes
+
+
+## 📚 Additional Resources
+
+- [Docker Security Best Practices](https://docs.docker.com/develop/security-best-practices/)
+- [Redis Security Documentation](https://redis.io/docs/management/security/)
+- [Container Security Guidelines](https://kubernetes.io/docs/concepts/security/)
+
+
+## 🔍 Service-Specific Security
+
+### Container Security
+- 🔒 **Image Security**: Use official images from trusted registries
+- 🔐 **Runtime Security**: Run containers as non-root users where possible
+- 🌐 **Network Isolation**: Proper network segmentation between services
+- � **Resource Limits**: Set appropriate CPU and memory limits
+
+### Redis Security
+- 🔑 **Data Security**: Secure transmission and storage of Redis data
+- 🏷️ **Service Authentication**: Proper authentication for Redis connections
+- 🌐 **Network Encryption**: Use TLS for Redis communication where applicable
+- 📊 **Access Logging**: Enable audit logging for monitoring access
+
+### Configuration Dependencies
+- 🔄 **Image Versions**: Pin to specific versions for security fixes
+- 📦 **Dependency Management**: Regular updates to Redis and RedisInsight images
+- 🔍 **Vulnerability Scanning**: Automated scanning for known vulnerabilities
+
+---
