@@ -3,14 +3,21 @@ services:
 
   redis:
     container_name: redis
-    image: redis:alpine:latest
-    
+    image: redis:alpine
     ports:
       - "6379:6379"
     restart: unless-stopped
-    command: ["redis-server", "--appendonly", "yes"] # For persistence if needed
+    command: [
+      "--appendonly yes",
+      "--port 0",
+      "--tls-port 6379",
+      "--tls-cert-file /certs/redis.crt",
+      "--tls-key-file /certs/redis.key",
+      "--tls-ca-cert-file /certs/redis.crt",
+      "--tls-auth-clients no"
+    ]
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "--tls", "--cacert", "/certs/redis.crt", "ping"]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -18,6 +25,8 @@ services:
       - redis-network
     volumes:
       - vol_redis:/data
+      - ./.certs/redis.crt:/certs/redis.crt:ro
+      - ./.certs/redis.key:/certs/redis.key:ro
 
   redis-insight:
     container_name: redis-insight
@@ -25,6 +34,11 @@ services:
     ports:
       - "5540:5540"
     restart: unless-stopped
+    environment:
+      - RI_REDIS_HOST=redis
+      - RI_REDIS_PORT=6379
+      - RI_REDIS_TLS_ENABLED=true
+      - RI_REDIS_TLS_CA_PATH=/certs/redis.crt
     depends_on:
       redis:
         condition: service_healthy
@@ -32,6 +46,7 @@ services:
       - redis-network
     volumes:
       - vol_redis_insight:/data
+      - ./.certs/redis.crt:/certs/redis.crt:ro
 
 networks:
   redis-network:
