@@ -28,8 +28,8 @@ services:
           - redis.docker.local
     volumes:
       - vol_redis:/data
-      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs}/docker-local.crt:/certs/docker-local.crt:ro
-      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs}/docker-local.key:/certs/docker-local.key:ro
+      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs/certs}/docker-local.crt:/certs/docker-local.crt:ro
+      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs/certs}/docker-local.key:/certs/docker-local.key:ro
 
   redis-insight:
     hostname: redis-insight.docker.local
@@ -52,7 +52,7 @@ services:
           - redis-insight.docker.local
     volumes:
       - vol_redis_insight:/data
-      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs}/docker-local.crt:/certs/docker-local.crt:ro
+      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs/certs}/docker-local.crt:/certs/docker-local.crt:ro
 
 networks:
   redis-network:
