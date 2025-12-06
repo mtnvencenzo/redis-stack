@@ -2,6 +2,7 @@ name: redis-stack
 services:
 
   redis:
+    hostname: redis.docker.local
     container_name: redis
     image: redis:alpine
     ports:
@@ -11,24 +12,27 @@ services:
       "--appendonly yes",
       "--port 0",
       "--tls-port 6379",
-      "--tls-cert-file /certs/redis.crt",
-      "--tls-key-file /certs/redis.key",
-      "--tls-ca-cert-file /certs/redis.crt",
+      "--tls-cert-file /certs/docker-local.crt",
+      "--tls-key-file /certs/docker-local.key",
+      "--tls-ca-cert-file /certs/docker-local.crt",
       "--tls-auth-clients no"
     ]
     healthcheck:
-      test: ["CMD", "redis-cli", "--tls", "--cacert", "/certs/redis.crt", "ping"]
+      test: ["CMD", "redis-cli", "--tls", "--cacert", "/certs/docker-local.crt", "ping"]
       interval: 5s
       timeout: 3s
       retries: 20
     networks:
-      - redis-network
+      redis-network:
+        aliases:
+          - redis.docker.local
     volumes:
       - vol_redis:/data
-      - ./.certs/redis.crt:/certs/redis.crt:ro
-      - ./.certs/redis.key:/certs/redis.key:ro
+      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs}/docker-local.crt:/certs/docker-local.crt:ro
+      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs}/docker-local.key:/certs/docker-local.key:ro
 
   redis-insight:
+    hostname: redis-insight.docker.local
     container_name: redis-insight
     image: redis/redisinsight:latest
     ports:
@@ -38,15 +42,17 @@ services:
       - RI_REDIS_HOST=redis
       - RI_REDIS_PORT=6379
       - RI_REDIS_TLS_ENABLED=true
-      - RI_REDIS_TLS_CA_PATH=/certs/redis.crt
+      - RI_REDIS_TLS_CA_PATH=/certs/docker-local.crt
     depends_on:
       redis:
         condition: service_healthy
     networks:
-      - redis-network
+      redis-network:
+        aliases:
+          - redis-insight.docker.local
     volumes:
       - vol_redis_insight:/data
-      - ./.certs/redis.crt:/certs/redis.crt:ro
+      - ${DOCKER_LOCAL_CERT_PATH:-$HOME/Github/docker-local-certs}/docker-local.crt:/certs/docker-local.crt:ro
 
 networks:
   redis-network:
